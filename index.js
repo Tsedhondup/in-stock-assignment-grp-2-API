@@ -1,4 +1,6 @@
-const express = require("express");
+
+const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5050;
 
@@ -10,7 +12,12 @@ app.get("/", (req, res) => {
 
 app.use(express.json());
 
-app.use("/warehouses", warehouseRoutes);
+// Use CORS middleware
+app.use(cors());
+
+// all warehouse routes
+app.use('/warehouses', warehouseRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`running at http://localhost:${PORT}`);
