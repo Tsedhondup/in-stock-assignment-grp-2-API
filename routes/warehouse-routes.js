@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const warehouseController = require("../controllers/warehouse-controller");
+const warehouseController = require("../controllers/warehouse-controllers");
 
-//Index Route - GET ALL WareHouses - TBD by Maddison
+router.route('/').get(warehouseController.warehouses);
 
 //GET SINGLE WAREHOUSE
 router.route("/:id").get(warehouseController.findOne);
