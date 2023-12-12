@@ -17,6 +17,8 @@ app.use(cors());
 
 // all warehouse routes
 app.use("/warehouses", warehouseRoutes);
+// all inventory routes
+app.use("/inventories", inventoryRoutes);
 
 // all inventory routes
 app.use("/inventories", inventoryRoutes);
