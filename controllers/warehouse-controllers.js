@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 
+// Find all warehouses
 const warehouses = (_req, res) => {
   knex("warehouses")
     .then((data) => {
@@ -10,6 +11,7 @@ const warehouses = (_req, res) => {
     );
 };
 
+// find warehouse with given warehouse id
 const findOne = (req, res) => {
   knex("warehouses")
     .where({ id: req.params.id })

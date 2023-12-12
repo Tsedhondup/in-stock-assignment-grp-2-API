@@ -6,4 +6,6 @@ router.route("/").get(warehouseController.warehouses);
 //GET SINGLE WAREHOUSE
 router.route("/:id").get(warehouseController.findOne);
 
+router.route("")
+
 module.exports = router;
