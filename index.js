@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 5050;
+require('dotenv').config();
+const PORT = process.env.PORT || 8080;
 
 const warehouseRoutes = require("./routes/warehouse-routes");
 const inventoryRoutes = require("./routes/inventory-routes");
@@ -18,7 +19,7 @@ app.use(cors());
 // all warehouse routes
 app.use("/warehouses", warehouseRoutes);
 // all inventory routes
-app.use("/inventories", inventoryRoutes);
+app.use("/warehouses", inventoryRoutes);
 
 
 app.listen(PORT, () => {
