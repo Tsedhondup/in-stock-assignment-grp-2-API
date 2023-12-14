@@ -27,7 +27,8 @@ const inventory = (_req, res) => {
 
 // find all inventory with given warehouse id
 const findInventoryForWarehouse = (req, res) => {
-  knex("inventories")
+  knex("warehouses")
+  //knex("inventories")
     .where({ warehouse_id: req.params.warehouse_id })
     .then((inventoryFound) => {
       if (inventoryFound.length === 0) {
