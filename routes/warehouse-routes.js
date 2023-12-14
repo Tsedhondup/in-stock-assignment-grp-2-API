@@ -8,4 +8,9 @@ router.route("/:id").get(warehouseController.findOne);
 
 router.route("")
 
+router
+  .route("/:id")
+  .get(warehouseController.findOne)
+  .delete(warehouseController.deleteWarehouse);
+
 module.exports = router;

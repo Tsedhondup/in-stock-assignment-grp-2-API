@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 8080;
+require("dotenv").config();
 
 const warehouseRoutes = require("./routes/warehouse-routes");
 const inventoryRoutes = require("./routes/inventory-routes");
