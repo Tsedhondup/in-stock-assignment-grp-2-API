@@ -2,10 +2,11 @@ const knex = require("knex")(require("../knexfile"));
 
 // FIND ALL INVENTORY
 const inventory = (_req, res) => {
-  knex("inventories")
-    .join("warehouses", "inventories.warehouse_id", "warehouses.id")
+  knex("warehouses")
+  .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
     .then((data) => {
       // Create respond body
+      console.log(data);
       const inventoryList = data.map((element) => {
         return (inventoryObject = {
           id: element.id,
@@ -23,7 +24,6 @@ const inventory = (_req, res) => {
       res.status(400).send(`Error retrieving Inventories: ${err}`);
     });
 };
-
 
 // find all inventory with given warehouse id
 const findInventoryForWarehouse = (req, res) => {
