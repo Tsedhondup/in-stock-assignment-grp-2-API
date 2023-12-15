@@ -2,10 +2,13 @@ const knex = require("knex")(require("../knexfile"));
 
 // FIND ALL INVENTORY
 const inventory = (_req, res) => {
-  knex("inventories")
-    .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
+
+  knex("warehouses")
+  .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
+
     .then((data) => {
       // Create respond body
+      console.log(data);
       const inventoryList = data.map((element) => {
         return (inventoryObject = {
           id: element.id,
@@ -32,7 +35,7 @@ const findOneItem = (req, res) => {
       if (itemsFound.length === 0) {
         return res
           .status(404)
-          .json({ message: `Warehouse with ID: ${req.params.id} not found` });
+          .json({ message: `Item with ID: ${req.params.id} not found` });
       }
 
 
@@ -41,7 +44,7 @@ const findOneItem = (req, res) => {
     })
     .catch(() => {
       res.status(500).json({
-        message: `Unable to retrieve warehouse data for warehouse with ID: ${req.params.id}`,
+        message: `Unable to retrieve inventory data for item with ID: ${req.params.id}`,
       });
     });
 };
