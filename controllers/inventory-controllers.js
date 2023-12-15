@@ -3,7 +3,7 @@ const knex = require("knex")(require("../knexfile"));
 // FIND ALL INVENTORY
 const inventory = (_req, res) => {
   knex("inventories")
-    .join("warehouses", "inventories.warehouse_id", "warehouses.id")
+    .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
     .then((data) => {
       // Create respond body
       const inventoryList = data.map((element) => {
@@ -17,6 +17,7 @@ const inventory = (_req, res) => {
           quantity: element.quantity,
         });
       });
+      console.log(inventoryList)
       res.status(200).json(inventoryList);
     })
     .catch((err) => {
