@@ -49,10 +49,30 @@ const findOneItem = (req, res) => {
     });
 };
 
+const editItem = (req, res) => {
+  knex("inventories")
+    .where({ id: req.params.id })
+    .update(req.body)
+    .then(() => {
+      return knex("inventories").where({
+        id: req.params.id,
+      });
+    })
+    .then((updatedInventory) => {
+      res.json(updatedInventory[0]);
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .json({ message: `Unable to update inventory with ID: ${req.params.id}` });
+    });
+};
+
 
 
 
 module.exports = {
   inventory,
   findOneItem,
+  editItem,
 };
