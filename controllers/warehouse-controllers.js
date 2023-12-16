@@ -51,8 +51,36 @@ const findInventoryForWarehouse = (req, res) => {
     });
 };
 
+const addWarehouse = (req, res) => {
+  if (
+    !req.body.warehouse_name ||
+    !req.body.address ||
+    !req.body.city ||
+    !req.body.country ||
+    !req.body.contact_name ||
+    !req.body.contact_position ||
+    !req.body.contact_phone ||
+    !req.body.contact_email
+  ) {
+    return res.status(400).send("Please provide values for all necessary data");
+  }
+
+  knex("warehouses")
+    .insert(req.body)
+    .then((result) => {
+      return knex("warehouses").where({ id: result[0] });
+    })
+    .then((createdWarehouse) => {
+      res.status(201).json(createdWarehouse);
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Unable to create new warehouse" });
+    });
+};
+
 module.exports = {
   warehouses,
   findOne,
   findInventoryForWarehouse,
+  addWarehouse,
 };
