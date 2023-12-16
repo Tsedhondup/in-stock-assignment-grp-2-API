@@ -39,7 +39,9 @@ const findInventoryForWarehouse = (req, res) => {
     .where({ warehouse_id: req.params.warehouseId })
     .then((inventoryFound) => {
       if (inventoryFound.length === 0) {
-        return res;
+        return res
+          .status(404)
+          .json({ message: `Item with ID: ${req.params.id} not found` });
       }
 
       return res.status(200).json(inventoryFound);
