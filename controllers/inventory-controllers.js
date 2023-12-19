@@ -2,13 +2,11 @@ const knex = require("knex")(require("../knexfile"));
 
 // FIND ALL INVENTORY
 const inventory = (_req, res) => {
-
   knex("warehouses")
-  .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
+    .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
 
     .then((data) => {
       // Create respond body
-      console.log(data);
       const inventoryList = data.map((element) => {
         return (inventoryObject = {
           id: element.id,
@@ -20,7 +18,6 @@ const inventory = (_req, res) => {
           quantity: element.quantity,
         });
       });
-      console.log(inventoryList)
       res.status(200).json(inventoryList);
     })
     .catch((err) => {
@@ -37,8 +34,6 @@ const findOneItem = (req, res) => {
           .status(404)
           .json({ message: `Item with ID: ${req.params.id} not found` });
       }
-
-
 
       res.status(200).json(itemsFound);
     })
@@ -64,12 +59,11 @@ const editItem = (req, res) => {
     .catch(() => {
       res
         .status(500)
-        .json({ message: `Unable to update inventory with ID: ${req.params.id}` });
+        .json({
+          message: `Unable to update inventory with ID: ${req.params.id}`,
+        });
     });
 };
-
-
-
 
 module.exports = {
   inventory,
