@@ -8,7 +8,6 @@ const inventory = (_req, res) => {
 
     .then((data) => {
       // Create respond body
-      console.log(data);
       const inventoryList = data.map((element) => {
         return (inventoryObject = {
           id: element.id,
@@ -20,7 +19,6 @@ const inventory = (_req, res) => {
           quantity: element.quantity,
         });
       });
-      console.log(inventoryList)
       res.status(200).json(inventoryList);
     })
     .catch((err) => {
@@ -80,6 +78,16 @@ const editItem = (req, res) => {
 
   knex("inventories")
     .where({ id: req.params.id })
+    .then((itemFound) => {
+      if (itemFound.length === 0) {
+        return res
+          .status(404)
+          .json({ message: `Item with ID: ${req.params.id} not found` });
+      }
+    });
+
+    knex("inventories")
+    .where({ id: req.params.id })
     .update(req.body)
     .then(() => {
       return knex("inventories").where({
@@ -90,14 +98,11 @@ const editItem = (req, res) => {
       res.json(updatedInventory[0]);
     })
     .catch(() => {
-      res
+      return res
         .status(404)
         .json({ message: `Item with ID: ${req.params.id} not found` });
     });
 };
-
-
-
 
 module.exports = {
   inventory,
