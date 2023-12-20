@@ -39,7 +39,9 @@ const findInventoryForWarehouse = (req, res) => {
     .where({ warehouse_id: req.params.warehouseId })
     .then((inventoryFound) => {
       if (inventoryFound.length === 0) {
-        return res;
+        return res
+          .status(404)
+          .json({ message: `Item with ID: ${req.params.id} not found` });
       }
 
       return res.status(200).json(inventoryFound);
@@ -51,7 +53,11 @@ const findInventoryForWarehouse = (req, res) => {
     });
 };
 
+
 const editWarehouse = (req, res) => {
+// =======
+// const addWarehouse = (req, res) => {
+// >>>>>>> develop
   if (
     !req.body.warehouse_name ||
     !req.body.address ||
@@ -62,6 +68,7 @@ const editWarehouse = (req, res) => {
     !req.body.contact_phone ||
     !req.body.contact_email
   ) {
+
     res.status(400).json("Incomplete form");
   }
 
@@ -96,11 +103,31 @@ const editWarehouse = (req, res) => {
         });
     }
   });
+// =======
+//     return res.status(400).send("Please provide values for all necessary data");
+//   }
+
+//   knex("warehouses")
+//     .insert(req.body)
+//     .then((result) => {
+//       return knex("warehouses").where({ id: result[0] });
+//     })
+//     .then((createdWarehouse) => {
+//       res.status(201).json(createdWarehouse);
+//     })
+//     .catch(() => {
+//       res.status(500).json({ message: "Unable to create new warehouse" });
+//     });
+// >>>>>>> develop
 };
 
 module.exports = {
   warehouses,
   findOne,
   findInventoryForWarehouse,
+
   editWarehouse,
+// =======
+//   addWarehouse,
+// >>>>>>> develop
 };
