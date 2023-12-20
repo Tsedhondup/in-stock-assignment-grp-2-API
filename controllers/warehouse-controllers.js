@@ -53,7 +53,11 @@ const findInventoryForWarehouse = (req, res) => {
     });
 };
 
-const addWarehouse = (req, res) => {
+
+const editWarehouse = (req, res) => {
+// =======
+// const addWarehouse = (req, res) => {
+// >>>>>>> develop
   if (
     !req.body.warehouse_name ||
     !req.body.address ||
@@ -64,25 +68,66 @@ const addWarehouse = (req, res) => {
     !req.body.contact_phone ||
     !req.body.contact_email
   ) {
-    return res.status(400).send("Please provide values for all necessary data");
+
+    res.status(400).json("Incomplete form");
   }
 
-  knex("warehouses")
-    .insert(req.body)
-    .then((result) => {
-      return knex("warehouses").where({ id: result[0] });
-    })
-    .then((createdWarehouse) => {
-      res.status(201).json(createdWarehouse);
-    })
-    .catch(() => {
-      res.status(500).json({ message: "Unable to create new warehouse" });
+  //  GET ALL THE WAREHOUSES
+  knex("warehouses").then((respond) => {
+    // AND THEN FIND WAREHOUSE WHOSE ID === req.params.id
+    const warehouseArray = respond.filter((item) => {
+      return item.id == req.params.id;
     });
+    /*
+    # CHECK IF WAREHOUSE WITH PROVIDED ID IS FOUND IN DATABASE 
+    # IF FOUND, TOTAL ITEM INSIDE wareHouse ARRAY WILL BE GREATER THEN ONE
+    */
+    if (warehouseArray.length < 1) {
+      res.status(404).json({
+        message: `Unable to update warehouse with ID: ${req.params.id}`,
+      });
+    } else {
+      knex("warehouses")
+        .where({ id: req.params.id })
+        .update(req.body)
+        .then(() => {
+          return knex("warehouses").where({
+            id: req.params.id,
+          });
+        })
+        .then((updatedWarehouse) => {
+          res.json(updatedWarehouse[0]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
+// =======
+//     return res.status(400).send("Please provide values for all necessary data");
+//   }
+
+//   knex("warehouses")
+//     .insert(req.body)
+//     .then((result) => {
+//       return knex("warehouses").where({ id: result[0] });
+//     })
+//     .then((createdWarehouse) => {
+//       res.status(201).json(createdWarehouse);
+//     })
+//     .catch(() => {
+//       res.status(500).json({ message: "Unable to create new warehouse" });
+//     });
+// >>>>>>> develop
 };
 
 module.exports = {
   warehouses,
   findOne,
   findInventoryForWarehouse,
-  addWarehouse,
+
+  editWarehouse,
+// =======
+//   addWarehouse,
+// >>>>>>> develop
 };
