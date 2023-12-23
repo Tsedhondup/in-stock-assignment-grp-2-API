@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { inventory } = require("../controllers/inventory-controllers");
 const warehouseController = require("../controllers/warehouse-controllers");
 
 router
@@ -15,7 +16,8 @@ router
 
 router
   .route("/:warehouseId/inventories")
-  .get(warehouseController.findInventoryForWarehouse);
+  .get(warehouseController.findInventoryForWarehouse)
+  .delete(warehouseController.deleteInventoryForWarehouse);
 
 router.route("");
 

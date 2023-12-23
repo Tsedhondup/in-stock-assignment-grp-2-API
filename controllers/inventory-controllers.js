@@ -109,7 +109,9 @@ const editItem = (req, res) => {
 //         .json({ message: `Item with ID: ${req.params.id} not found` });
 // >>>>>>> develop
     });
+
 };
+
 
 module.exports = {
   inventory,
