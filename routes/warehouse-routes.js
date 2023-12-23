@@ -17,7 +17,6 @@ router
 router
   .route("/:warehouseId/inventories")
   .get(warehouseController.findInventoryForWarehouse)
-  .delete(warehouseController.deleteInventoryForWarehouse);
 
 router.route("");
 
