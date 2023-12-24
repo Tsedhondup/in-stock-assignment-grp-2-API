@@ -59,12 +59,12 @@ const addItem = (req, res) => {
     });
   }
 
-  // //checks if quantity field is a number
-  // if (!Number(req.body.quantity)) {
-  //   return res.status(400).json({
-  //     message: `Item must be quantity of number type `,
-  //   });
-  // }
+  //checks if quantity field is a number
+  if (isNaN(parseInt(req.body.quantity))) {
+    return res.status(400).json({
+      message: `Item must be quantity of number type `,
+    });
+  }
 
   // checks if the warehouse field is a warehouse that exists
   knex("warehouses")
@@ -153,11 +153,9 @@ const editItem = (req, res) => {
       //         .json({ message: `Item with ID: ${req.params.id} not found` });
       // >>>>>>> develop
     });
-
 };
 
 const deleteInventoryItem = (req, res) => {
-
   knex("inventories")
     .where({ id: req.params.id })
     .del()
@@ -175,11 +173,10 @@ const deleteInventoryItem = (req, res) => {
     });
 };
 
-
 module.exports = {
   inventory,
   findOneItem,
   addItem,
   editItem,
-  deleteInventoryItem
+  deleteInventoryItem,
 };
