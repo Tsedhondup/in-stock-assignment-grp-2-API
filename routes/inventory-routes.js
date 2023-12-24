@@ -10,7 +10,8 @@ router
 router
   .route("/:id")
   .get(inventoryController.findOneItem)
-  .patch(inventoryController.editItem);
+  .patch(inventoryController.editItem)
+  .delete(inventoryController.deleteInventoryItem);
 
 //router.route("")
 

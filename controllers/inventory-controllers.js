@@ -153,11 +153,33 @@ const editItem = (req, res) => {
       //         .json({ message: `Item with ID: ${req.params.id} not found` });
       // >>>>>>> develop
     });
+
 };
+
+const deleteInventoryItem = (req, res) => {
+
+  knex("inventories")
+    .where({ id: req.params.id })
+    .del()
+    .then((result) => {
+      if (result === 0) {
+        return res.status(400).json({
+          message: `Inventory Item with ID: ${id} to be deleted not found.`,
+        });
+      }
+
+      res.status(204).send();
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Unable to delete Inventory item" });
+    });
+};
+
 
 module.exports = {
   inventory,
   findOneItem,
   addItem,
   editItem,
+  deleteInventoryItem
 };
