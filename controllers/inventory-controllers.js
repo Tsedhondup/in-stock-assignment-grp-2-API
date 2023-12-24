@@ -44,24 +44,71 @@ const findOneItem = (req, res) => {
     });
 };
 
+const addItem = (req, res) => {
+  //checks if there are any empty fields
+  if (
+    !req.body.warehouse_id ||
+    !req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
+    !req.body.quantity
+  ) {
+    return res.status(400).json({
+      message: `Item has empty or undefined fields`,
+    });
+  }
+
+  // //checks if quantity field is a number
+  // if (!Number(req.body.quantity)) {
+  //   return res.status(400).json({
+  //     message: `Item must be quantity of number type `,
+  //   });
+  // }
+
+  // checks if the warehouse field is a warehouse that exists
+  knex("warehouses")
+    .where({ id: req.body.warehouse_id })
+    .then((warehouseFound) => {
+      if (warehouseFound.length === 0) {
+        return res.status(400).json({
+          message: `Warehouse with ID: ${req.body.warehouse_id} not found`,
+        });
+      }
+    });
+
+  knex("inventories")
+    .insert(req.body)
+    .then((result) => {
+      return knex("inventories").where({ id: result[0] });
+    })
+    .then((createdinventory) => {
+      res.status(201).json(createdinventory);
+    })
+    .catch(() => {
+      res.status(500).json({ message: "Unable to create new inventory item" });
+    });
+};
+
 const editItem = (req, res) => {
   // checks if there are any expty fields
-  if (!req.body.warehouse_id ||
+  if (
+    !req.body.warehouse_id ||
     !req.body.item_name ||
     !req.body.description ||
     !req.body.quantity ||
     !req.body.status ||
     !req.body.quantity
   ) {
-    return res
-      .status(400)
-      .json({ message: `Item with ID: ${req.params.id} has empty or undefined fields` });
+    return res.status(400).json({
+      message: `Item with ID: ${req.params.id} has empty or undefined fields`,
+    });
   }
   // checks if quantity field is a number
   if (!Number(req.body.quantity)) {
-    return res
-      .status(400)
-      .json({ message: `Item with ID: ${req.params.id} must have quantity of number type` });
+    return res.status(400).json({
+      message: `Item with ID: ${req.params.id} must have quantity of number type`,
+    });
   }
 
   // checks if the warehouse field is a warehouse that exsits
@@ -85,7 +132,7 @@ const editItem = (req, res) => {
       }
     });
 
-    knex("inventories")
+  knex("inventories")
     .where({ id: req.params.id })
     .update(req.body)
     .then(() => {
@@ -97,22 +144,20 @@ const editItem = (req, res) => {
       res.json(updatedInventory[0]);
     })
     .catch(() => {
-
-      res
-        .status(500)
-        .json({
-          message: `Unable to update inventory with ID: ${req.params.id}`,
-        });
-// =======
-//       return res
-//         .status(404)
-//         .json({ message: `Item with ID: ${req.params.id} not found` });
-// >>>>>>> develop
+      res.status(500).json({
+        message: `Unable to update inventory with ID: ${req.params.id}`,
+      });
+      // =======
+      //       return res
+      //         .status(404)
+      //         .json({ message: `Item with ID: ${req.params.id} not found` });
+      // >>>>>>> develop
     });
 };
 
 module.exports = {
   inventory,
   findOneItem,
+  addItem,
   editItem,
 };
