@@ -1,5 +1,5 @@
 const knex = require("knex")(require("../knexfile"));
-
+const validator = require("validator");
 // Find all warehouses
 const warehouses = (_req, res) => {
   knex("warehouses")
@@ -64,7 +64,6 @@ const addWarehouse = (req, res) => {
     !req.body.contact_phone ||
     !req.body.contact_email
   ) {
-    return res.status(400).send("Please provide values for all necessary data");
   }
 
   knex("warehouses")
@@ -81,18 +80,22 @@ const addWarehouse = (req, res) => {
 };
 
 const editWarehouse = (req, res) => {
-  // =======
-  // const addWarehouse = (req, res) => {
-  // >>>>>>> develop
+  // VALIDATE PHONE-NUMBER
+  if (!validator.isMobilePhone(req.body.contact_phone)) {
+    return res.status(400).send("Invalid phone number");
+  }
+  // VALIDATE EMAIL
+  if (!validator.isEmail(req.body.contact_email)) {
+    return res.status(400).send("Invalid email!");
+  }
+  // VALIDATE FORM DATA
   if (
     !req.body.warehouse_name ||
     !req.body.address ||
     !req.body.city ||
     !req.body.country ||
     !req.body.contact_name ||
-    !req.body.contact_position ||
-    !req.body.contact_phone ||
-    !req.body.contact_email
+    !req.body.contact_position
   ) {
     res.status(400).json("Incomplete form");
   }
@@ -149,37 +152,6 @@ const deleteWarehouse = (req, res) => {
       res.status(500).json({ message: "Unable to delete warehuse" });
     });
 };
-
-// const deleteInventoryForWarehouse = (req, res) => {
-//   const warehouseId = req.params.warehouseId;
-
-//   // Check if warehouse exists
-//   knex("warehouses")
-//     .where({ id: warehouseId })
-//     .then((warehouseFound) => {
-//       if (warehouseFound.length === 0) {
-//         return res.status(404).json({ message: `Warehouse with ID: ${warehouseId} not found` });
-//       }
-
-//       // If warehouse exists, delete associated inventory items
-//       knex("inventories")
-//         .where({ warehouse_id: warehouseId })
-//         .del()
-//         .then((deletedCount) => {
-//           res.status(200).json({
-//             message: `Deleted ${deletedCount} inventory items for Warehouse ${warehouseId}`,
-//           });
-//         })
-//         .catch((err) => {
-//           res.status(500).json({
-//             message: `Error deleting inventory items for Warehouse ${warehouseId}: ${err}`,
-//           });
-//         });
-//     })
-//     .catch((err) => {
-//       res.status(500).json({ message: `Error checking warehouse existence: ${err}` });
-//     });
-// };
 
 module.exports = {
   warehouses,
