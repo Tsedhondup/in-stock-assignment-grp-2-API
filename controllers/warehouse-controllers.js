@@ -54,16 +54,24 @@ const findInventoryForWarehouse = (req, res) => {
 };
 
 const addWarehouse = (req, res) => {
+  // VALIDATE PHONE-NUMBER
+  if (!validator.isMobilePhone(req.body.contact_phone)) {
+    return res.status(400).send("Invalid phone number");
+  }
+  // VALIDATE EMAIL
+  if (!validator.isEmail(req.body.contact_email)) {
+    return res.status(400).send("Invalid email!");
+  }
+
   if (
     !req.body.warehouse_name ||
     !req.body.address ||
     !req.body.city ||
     !req.body.country ||
     !req.body.contact_name ||
-    !req.body.contact_position ||
-    !req.body.contact_phone ||
-    !req.body.contact_email
+    !req.body.contact_position
   ) {
+    res.status(400).json("Incomplete form");
   }
 
   knex("warehouses")
