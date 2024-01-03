@@ -161,7 +161,7 @@ const deleteWarehouse = (req, res) => {
     });
 };
 
-const warehusesSortByName = (req,res) => {
+const warehousesSortByName = (req,res) => {
   knex.select().from("warehouses")
     .orderBy('warehouse_name', 'asc') 
     .then((data) => {
@@ -179,5 +179,5 @@ module.exports = {
   addWarehouse,
   editWarehouse,
   deleteWarehouse,
-  warehusesSortByName
+  warehousesSortByName
 };
