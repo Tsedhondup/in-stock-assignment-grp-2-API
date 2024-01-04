@@ -161,6 +161,17 @@ const deleteWarehouse = (req, res) => {
     });
 };
 
+const warehousesSortByName = (req,res) => {
+  knex.select().from("warehouses")
+    .orderBy('warehouse_name', 'asc') 
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => 
+    res.status(400).send(`Unable to retrieve warehouses: ${err}`)
+    );
+};
+
 module.exports = {
   warehouses,
   findOne,
@@ -168,4 +179,5 @@ module.exports = {
   addWarehouse,
   editWarehouse,
   deleteWarehouse,
+  warehousesSortByName
 };
