@@ -5,7 +5,10 @@ const inventoryController = require("../controllers/inventory-controllers");
 router
   .route("/")
   .get((req, res, next) => {
-    if (req.query.sort_by === 'item_name'|| req.query.sort_by === 'category') {
+    const validSortFields = ['item_name', 'category', 'status', 'quantity'];
+    const sortBy = req.query.sort_by;
+
+    if (sortBy && validSortFields.includes(sortBy)) {
       return inventoryController.inventorySort(req, res, next);
     } else {
       return inventoryController.inventory(req, res, next);

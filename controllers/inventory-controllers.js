@@ -189,7 +189,13 @@ const inventorySort = (req, res) => {
           case 'category':
             queryBuilder.orderBy('category', 'asc');
             break;
-       
+          case 'status':
+            queryBuilder.orderBy('status', 'asc');
+            break;
+          case 'quantity':
+            queryBuilder.orderBy('quantity', 'asc');
+            break;
+
           default:
             // Default to no sorting if the provided sort_by parameter isn't valid
             break;
