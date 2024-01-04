@@ -173,10 +173,22 @@ const deleteInventoryItem = (req, res) => {
     });
 };
 
+const inventorySortByName = (req,res) => {
+  knex.select().from("inventories")
+    .orderBy('item_name', 'asc') 
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => 
+    res.status(400).send(`Unable to retrieve inventories: ${err}`)
+    );
+};
+
 module.exports = {
   inventory,
   findOneItem,
   addItem,
   editItem,
   deleteInventoryItem,
+  inventorySortByName
 };
