@@ -173,16 +173,37 @@ const deleteInventoryItem = (req, res) => {
     });
 };
 
-const inventorySortByName = (req,res) => {
-  knex.select().from("inventories")
-    .orderBy('item_name', 'asc') 
+const inventorySort = (req, res) => {
+  const sortBy = req.query.sort_by;
+
+  knex
+    .select()
+    .from("inventories")
+    .modify((queryBuilder) => {
+      // Apply sorting if sort_by parameter is given
+      if (sortBy) {
+        switch (sortBy) {
+          case 'item_name':
+            queryBuilder.orderBy('item_name', 'asc');
+            break;
+          case 'category':
+            queryBuilder.orderBy('category', 'asc');
+            break;
+       
+          default:
+            // Default to no sorting if the provided sort_by parameter isn't valid
+            break;
+        }
+      }
+    })
     .then((data) => {
       res.status(200).json(data);
     })
-    .catch((err) => 
-    res.status(400).send(`Unable to retrieve inventories: ${err}`)
+    .catch((err) =>
+      res.status(400).send(`Unable to retrieve inventories: ${err}`)
     );
 };
+
 
 module.exports = {
   inventory,
@@ -190,5 +211,5 @@ module.exports = {
   addItem,
   editItem,
   deleteInventoryItem,
-  inventorySortByName
+  inventorySort
 };
