@@ -175,28 +175,31 @@ const deleteInventoryItem = (req, res) => {
 
 const inventorySort = (req, res) => {
   const sortBy = req.query.sort_by;
+  const orderBy = req.query.order_by;
+
+  // validate case asc or desc here 
 
   knex
     .select()
-    .from("inventories")
-    .join("warehouses")
+    .from("warehouses")
+    .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
     .modify((queryBuilder) => {
       if (sortBy) {
         switch (sortBy) {
           case 'item_name':
-            queryBuilder.orderBy('inventories.item_name', 'asc');
+            queryBuilder.orderBy('inventories.item_name', orderBy);
             break;
           case 'category':
-            queryBuilder.orderBy('inventories.category', 'asc');
+            queryBuilder.orderBy('inventories.category', orderBy);
             break;
           case 'status':
-            queryBuilder.orderBy('inventories.status', 'asc');
+            queryBuilder.orderBy('inventories.status', orderBy);
             break;
           case 'quantity':
-            queryBuilder.orderBy('inventories.quantity', 'asc');
+            queryBuilder.orderBy('inventories.quantity', orderBy);
             break;
           case 'warehouse_name':
-            queryBuilder.orderBy('warehouses.warehouse_name', 'asc');
+            queryBuilder.orderBy('warehouses.warehouse_name', orderBy);
             break;
           default:
             // Default to no sorting if the provided sort_by parameter isn't valid
