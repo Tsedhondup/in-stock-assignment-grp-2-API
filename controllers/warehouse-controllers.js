@@ -54,10 +54,12 @@ const findInventoryForWarehouse = (req, res) => {
 };
 
 const addWarehouse = (req, res) => {
+  const phoneRegex = /\+1\s\(\d\d\d\)\s\d\d\d-\d\d\d\d/;
   // VALIDATE PHONE-NUMBER
-  if (!validator.isMobilePhone(req.body.contact_phone)) {
+  if (!req.body.contact_phone.match(phoneRegex)) {
     return res.status(400).send("Invalid phone number");
   }
+
   // VALIDATE EMAIL
   if (!validator.isEmail(req.body.contact_email)) {
     return res.status(400).send("Invalid email!");
@@ -88,8 +90,9 @@ const addWarehouse = (req, res) => {
 };
 
 const editWarehouse = (req, res) => {
+  const phoneRegex = /\+1\s\(\d\d\d\)\s\d\d\d-\d\d\d\d/;
   // VALIDATE PHONE-NUMBER
-  if (!validator.isMobilePhone(req.body.contact_phone)) {
+  if (!req.body.contact_phone.match(phoneRegex)) {
     return res.status(400).send("Invalid phone number");
   }
   // VALIDATE EMAIL
@@ -161,14 +164,16 @@ const deleteWarehouse = (req, res) => {
     });
 };
 
-const warehousesSortByName = (req,res) => {
-  knex.select().from("warehouses")
-    .orderBy('warehouse_name', 'asc') 
+const warehousesSortByName = (req, res) => {
+  knex
+    .select()
+    .from("warehouses")
+    .orderBy("warehouse_name", "asc")
     .then((data) => {
       res.status(200).json(data);
     })
-    .catch((err) => 
-    res.status(400).send(`Unable to retrieve warehouses: ${err}`)
+    .catch((err) =>
+      res.status(400).send(`Unable to retrieve warehouses: ${err}`)
     );
 };
 
@@ -179,5 +184,5 @@ module.exports = {
   addWarehouse,
   editWarehouse,
   deleteWarehouse,
-  warehousesSortByName
+  warehousesSortByName,
 };
