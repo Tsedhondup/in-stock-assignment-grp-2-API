@@ -179,23 +179,25 @@ const inventorySort = (req, res) => {
   knex
     .select()
     .from("inventories")
+    .join("warehouses")
     .modify((queryBuilder) => {
-      // Apply sorting if sort_by parameter is given
       if (sortBy) {
         switch (sortBy) {
           case 'item_name':
-            queryBuilder.orderBy('item_name', 'asc');
+            queryBuilder.orderBy('inventories.item_name', 'asc');
             break;
           case 'category':
-            queryBuilder.orderBy('category', 'asc');
+            queryBuilder.orderBy('inventories.category', 'asc');
             break;
           case 'status':
-            queryBuilder.orderBy('status', 'asc');
+            queryBuilder.orderBy('inventories.status', 'asc');
             break;
           case 'quantity':
-            queryBuilder.orderBy('quantity', 'asc');
+            queryBuilder.orderBy('inventories.quantity', 'asc');
             break;
-
+          case 'warehouse_name':
+            queryBuilder.orderBy('warehouses.warehouse_name', 'asc');
+            break;
           default:
             // Default to no sorting if the provided sort_by parameter isn't valid
             break;
@@ -209,6 +211,7 @@ const inventorySort = (req, res) => {
       res.status(400).send(`Unable to retrieve inventories: ${err}`)
     );
 };
+
 
 
 module.exports = {
