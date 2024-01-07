@@ -179,12 +179,15 @@ const warehouseSort = (req, res) => {
 
 
     })
+
     .then((data) => {
       res.status(200).json(data);
     })
     .catch((err) =>
 
+
       res.status(400).send(`Unable to retrieve inventories: ${err}`)
+
 
     );
 };
@@ -197,5 +200,6 @@ module.exports = {
   editWarehouse,
   deleteWarehouse,
   warehouseSort
+
 
 };
