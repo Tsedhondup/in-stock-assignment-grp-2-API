@@ -5,7 +5,7 @@ const inventoryController = require("../controllers/inventory-controllers");
 router
   .route("/")
   .get((req, res, next) => {
-    const validSortFields = ['item_name', 'category', 'status', 'quantity'];
+    const validSortFields = ['item_name', 'category', 'status', 'quantity',  'warehouse_name'];
     const sortBy = req.query.sort_by;
 
     if (sortBy && validSortFields.includes(sortBy)) {

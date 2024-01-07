@@ -1,3 +1,5 @@
+const { warehouses } = require("./warehouse-controllers");
+
 const knex = require("knex")(require("../knexfile"));
 
 // FIND ALL INVENTORY
@@ -184,28 +186,12 @@ const inventorySort = (req, res) => {
     .from("warehouses")
     .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
     .modify((queryBuilder) => {
-      if (sortBy) {
-        switch (sortBy) {
-          case 'item_name':
-            queryBuilder.orderBy('inventories.item_name', orderBy);
-            break;
-          case 'category':
-            queryBuilder.orderBy('inventories.category', orderBy);
-            break;
-          case 'status':
-            queryBuilder.orderBy('inventories.status', orderBy);
-            break;
-          case 'quantity':
-            queryBuilder.orderBy('inventories.quantity', orderBy);
-            break;
-          case 'warehouse_name':
-            queryBuilder.orderBy('warehouses.warehouse_name', orderBy);
-            break;
-          default:
-            // Default to no sorting if the provided sort_by parameter isn't valid
-            break;
-        }
+      if (sortBy == "warehouse_name") {
+        queryBuilder.orderBy(`warehouses.${sortBy}`, orderBy)
+      } else {
+        queryBuilder.orderBy(`inventories.${sortBy}`, orderBy)
       }
+      
     })
     .then((data) => {
       res.status(200).json(data);
@@ -214,6 +200,7 @@ const inventorySort = (req, res) => {
       res.status(400).send(`Unable to retrieve inventories: ${err}`)
     );
 };
+
 
 
 
