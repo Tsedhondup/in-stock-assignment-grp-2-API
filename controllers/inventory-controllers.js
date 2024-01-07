@@ -1,3 +1,5 @@
+const { warehouses } = require("./warehouse-controllers");
+
 const knex = require("knex")(require("../knexfile"));
 
 // FIND ALL INVENTORY
@@ -173,10 +175,40 @@ const deleteInventoryItem = (req, res) => {
     });
 };
 
+const inventorySort = (req, res) => {
+  const sortBy = req.query.sort_by;
+  const orderBy = req.query.order_by;
+
+  // validate case asc or desc here 
+
+  knex
+    .select()
+    .from("warehouses")
+    .join("inventories", "inventories.warehouse_id", "=", "warehouses.id")
+    .modify((queryBuilder) => {
+      if (sortBy == "warehouse_name") {
+        queryBuilder.orderBy(`warehouses.${sortBy}`, orderBy)
+      } else {
+        queryBuilder.orderBy(`inventories.${sortBy}`, orderBy)
+      }
+      
+    })
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) =>
+      res.status(400).send(`Unable to retrieve inventories: ${err}`)
+    );
+};
+
+
+
+
 module.exports = {
   inventory,
   findOneItem,
   addItem,
   editItem,
   deleteInventoryItem,
+  inventorySort
 };
