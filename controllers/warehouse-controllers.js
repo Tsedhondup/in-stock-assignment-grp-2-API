@@ -161,14 +161,37 @@ const deleteWarehouse = (req, res) => {
     });
 };
 
-const warehousesSortByName = (req,res) => {
-  knex.select().from("warehouses")
-    .orderBy('warehouse_name', 'asc') 
+// const warehousesSortByName = (req,res) => {
+//   knex.select().from("warehouses")
+//     .orderBy('warehouse_name', 'asc') 
+//     .then((data) => {
+//       res.status(200).json(data);
+//     })
+//     .catch((err) => 
+//     res.status(400).send(`Unable to retrieve warehouses: ${err}`)
+//     );
+// };
+
+const warehouseSort = (req, res) => {
+  const sortBy = req.query.sort_by;
+  const orderBy = req.query.order_by;
+
+  // validate case asc or desc here 
+
+  knex
+    .select()
+    .from("warehouses")
+    .modify((queryBuilder) => {
+
+    queryBuilder.orderBy(`warehouses.${sortBy}`, orderBy)
+
+
+    })
     .then((data) => {
       res.status(200).json(data);
     })
-    .catch((err) => 
-    res.status(400).send(`Unable to retrieve warehouses: ${err}`)
+    .catch((err) =>
+      res.status(400).send(`Unable to retrieve inventories: ${err}`)
     );
 };
 
@@ -179,5 +202,5 @@ module.exports = {
   addWarehouse,
   editWarehouse,
   deleteWarehouse,
-  warehousesSortByName
+  warehouseSort
 };
