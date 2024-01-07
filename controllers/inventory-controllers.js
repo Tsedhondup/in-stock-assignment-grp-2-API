@@ -62,7 +62,7 @@ const addItem = (req, res) => {
   }
 
   //checks if quantity field is a number
-  if (isNaN(parseInt(req.body.quantity))) {
+  if (isNaN(parseInt(req.body.quantity)) && req.body.quantity !== "0") {
     return res.status(400).json({
       message: `Item must be quantity of number type `,
     });
@@ -107,7 +107,7 @@ const editItem = (req, res) => {
     });
   }
   // checks if quantity field is a number
-  if (!Number(req.body.quantity)) {
+  if (!Number(req.body.quantity) && req.body.quantity !== "0") {
     return res.status(400).json({
       message: `Item with ID: ${req.params.id} must have quantity of number type`,
     });
