@@ -2,17 +2,20 @@ const router = require("express").Router();
 const { inventory } = require("../controllers/inventory-controllers");
 const warehouseController = require("../controllers/warehouse-controllers");
 
-router
+
+  router
   .route("/")
   .get((req, res, next) => {
-    if (req.query.sort_by ==='warehouse_name'){
-      return warehouseController.warehousesSortByName(req,res, next);
+    const validSortFields = ["warehouse_name", "city", "contact_name", "contact_email"];
+    const sortBy = req.query.sort_by;
+
+    if (sortBy && validSortFields.includes(sortBy)) {
+      return warehouseController.warehouseSort(req, res, next);
     } else {
-      return warehouseController.warehouses(req,res, next);
+      return inventoryController.warehouses(req, res, next);
     }
   })
   .post(warehouseController.addWarehouse);
- 
 
 //GET SINGLE WAREHOUSE
 router
