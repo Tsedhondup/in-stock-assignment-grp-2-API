@@ -12,7 +12,7 @@ const warehouseController = require("../controllers/warehouse-controllers");
     if (sortBy && validSortFields.includes(sortBy)) {
       return warehouseController.warehouseSort(req, res, next);
     } else {
-      return inventoryController.warehouses(req, res, next);
+      return warehouseController.warehouses(req, res, next);
     }
   })
   .post(warehouseController.addWarehouse);
